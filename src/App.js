@@ -12,7 +12,7 @@ import HomePage from "./components/HomePage/HomePage";
 import FriendsPage from "./components/FriendsPage/FriendsPage";
 import MapPage from "./components/MapPage/MapPage";
 import SearchPage from "./components/SearchPage/SearchPage";
-
+import SignIn from './components/SignIn/SignIn';
 
 function App() {
     return (
@@ -21,7 +21,8 @@ function App() {
                 <div className="App__content">
                     <TopNav />
                     <Routes>
-                        <Route exact path="/" element={<HomePage />} />
+                        <Route exact path="/signin" element={<SignIn />} />
+                        <Route exact path="/" element={<SignIn />} />
                         <Route exact path="/trips" element={<TripsPage />} />
                         <Route exact path="/friends" element={<FriendsPage />} />
                         <Route exact path="/map" element={<MapPage />} />
