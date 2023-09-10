@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios'
+import axios from 'axios';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -31,21 +31,27 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [email, setmail] = React.useState('')
-  const [password, setpassword] = React.useState('')
-  const handleSubmit = async(event) => {
-    const request = await axios.post('https://127.0.0.1:3000/api/api-keys',null,{
-    auth:{
-      username: email,
-      password: password
-    }
-    });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      const response = await axios.post('https://127.0.0.1:3000/api/api-keys', null, {
+        auth: {
+          username: email,
+          password: password,
+        },
+      });
+      const { token } = response.data;
+      setToken(token);
+      localStorage.setItem('token', token);
+      // Redirige al usuario a la página principal o realiza otras acciones necesarias después de la autenticación exitosa.
+    } catch (error) {
+      // Maneja los errores de autenticación aquí.
+      console.error('Error de autenticación:', error);
+    }
   };
 
   return (
