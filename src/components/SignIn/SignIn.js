@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -34,11 +35,12 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://127.0.0.1:3000/api/api-keys', null, {
+      const response = await axios.post('http://127.0.0.1:3000/api/v1/api-keys', null, {
         auth: {
           username: email,
           password: password,
@@ -47,6 +49,7 @@ export default function SignIn() {
       const { token } = response.data;
       setToken(token);
       localStorage.setItem('token', token);
+      navigate("/trips")
       // Redirige al usuario a la página principal o realiza otras acciones necesarias después de la autenticación exitosa.
     } catch (error) {
       // Maneja los errores de autenticación aquí.
@@ -74,6 +77,7 @@ export default function SignIn() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
+              onChange = {(event)=>setEmail(event.target.value)}
               margin="normal"
               required
               fullWidth
@@ -84,6 +88,7 @@ export default function SignIn() {
               autoFocus
             />
             <TextField
+              onChange = {(event)=>setPassword(event.target.value)}
               margin="normal"
               required
               fullWidth
